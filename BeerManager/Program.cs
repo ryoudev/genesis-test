@@ -1,7 +1,6 @@
 ﻿using BeerManager.Models.Context;
 using BeerManager.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +11,10 @@ var configuration = new ConfigurationBuilder()
 
 
 builder.Services.AddDbContext<BeerManagerContext>(x => x.UseSqlServer(configuration.GetConnectionString("SqlConnectionString")));
+builder.Services.AddScoped<IBeerService, BeerService>();
+builder.Services.AddScoped<IVendorService, VendorService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

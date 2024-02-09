@@ -24,14 +24,14 @@ namespace BeerManager.Controllers
             return Ok(beer);
         }
 
-        [HttpGet]
+        [HttpGet("brasserie/{id}")]
         public ActionResult<IEnumerable<Beer>> GetBeersByBrasserie(int id)
         {
             var beers = _beerService.GetBeersByBrasserie(id);
             return Ok(beers);
         }
 
-        [HttpGet]
+        [HttpGet("vendors/{id}")]
         public ActionResult<IEnumerable<Beer>> GetVendorsByBeer(int id)
         {
             var vendors = _beerService.GetVendorsByBeer(id);
