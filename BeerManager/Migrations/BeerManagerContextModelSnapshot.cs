@@ -24,11 +24,11 @@ namespace BeerManager.Migrations
 
             modelBuilder.Entity("BeerManager.Models.Beer", b =>
                 {
-                    b.Property<int>("BeerId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BeerId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<double>("AlcoholDegree")
                         .HasColumnType("float");
@@ -43,7 +43,7 @@ namespace BeerManager.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("BeerId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BrasserieId");
 
@@ -52,34 +52,31 @@ namespace BeerManager.Migrations
 
             modelBuilder.Entity("BeerManager.Models.Brasserie", b =>
                 {
-                    b.Property<int>("BrasserieId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrasserieId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("BrasserieId");
+                    b.HasKey("Id");
 
                     b.ToTable("Brasseries");
                 });
 
             modelBuilder.Entity("BeerManager.Models.Order", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BeerId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -90,7 +87,7 @@ namespace BeerManager.Migrations
                     b.Property<int>("VendorId")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BeerId");
 
@@ -101,22 +98,22 @@ namespace BeerManager.Migrations
 
             modelBuilder.Entity("BeerManager.Models.Stock", b =>
                 {
-                    b.Property<int>("StockId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StockId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BeerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StockQuantity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("VendorId")
+                    b.Property<int?>("VendorId")
                         .HasColumnType("int");
 
-                    b.HasKey("StockId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BeerId");
 
@@ -127,17 +124,17 @@ namespace BeerManager.Migrations
 
             modelBuilder.Entity("BeerManager.Models.Vendor", b =>
                 {
-                    b.Property<int>("VendorId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VendorId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("VendorId");
+                    b.HasKey("Id");
 
                     b.ToTable("Vendors");
                 });
@@ -145,7 +142,7 @@ namespace BeerManager.Migrations
             modelBuilder.Entity("BeerManager.Models.Beer", b =>
                 {
                     b.HasOne("BeerManager.Models.Brasserie", "Brasserie")
-                        .WithMany("Beers")
+                        .WithMany()
                         .HasForeignKey("BrasserieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -161,15 +158,13 @@ namespace BeerManager.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BeerManager.Models.Vendor", "Vendor")
-                        .WithMany()
+                    b.HasOne("BeerManager.Models.Vendor", null)
+                        .WithMany("Orders")
                         .HasForeignKey("VendorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Beer");
-
-                    b.Navigation("Vendor");
                 });
 
             modelBuilder.Entity("BeerManager.Models.Stock", b =>
@@ -180,24 +175,17 @@ namespace BeerManager.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BeerManager.Models.Vendor", "Vendor")
+                    b.HasOne("BeerManager.Models.Vendor", null)
                         .WithMany("Stocks")
-                        .HasForeignKey("VendorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VendorId");
 
                     b.Navigation("Beer");
-
-                    b.Navigation("Vendor");
-                });
-
-            modelBuilder.Entity("BeerManager.Models.Brasserie", b =>
-                {
-                    b.Navigation("Beers");
                 });
 
             modelBuilder.Entity("BeerManager.Models.Vendor", b =>
                 {
+                    b.Navigation("Orders");
+
                     b.Navigation("Stocks");
                 });
 #pragma warning restore 612, 618

@@ -1,11 +1,10 @@
-﻿using System;
-namespace BeerManager.Models
+﻿namespace BeerManager.Models
 {
 	public class Vendor
 	{
-        public int VendorId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public List<Beer> Beers { get; set; }
         public List<Stock> Stocks { get; set; }
+        public List<Order> Orders { get; set; }
     }
 }

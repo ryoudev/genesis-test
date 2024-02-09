@@ -8,7 +8,7 @@ namespace BeerManager.Services
         Beer CreateBeer(Beer newBeer);
         void DeleteBeer(int beerId);
         List<Beer> GetBeersByBrasserie(int brasserieId);
-        List<Vendor> GetVendorsByBeer(int beerId);
+        List<string> GetVendorsByBeer(int beerId);
     }
 }
 

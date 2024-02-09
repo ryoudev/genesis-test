@@ -1,8 +1,10 @@
-﻿namespace BeerManager.Services
+﻿using BeerManager.Models;
+
+namespace BeerManager.Services
 {
 	public interface IOrderService
 	{
-		void CreateOrder(int beerId, int quantity);
+        (decimal totalPrice, string summary) AskQuote(List<Order> orders, int vendorId);
 	}
 }
 

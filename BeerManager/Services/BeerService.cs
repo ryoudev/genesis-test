@@ -22,29 +22,26 @@ namespace BeerManager.Services
 
         public void DeleteBeer(int beerId)
         {
-            var beer = _context.Beers.FirstOrDefault(x => x.BeerId == beerId);
-            if(beer != null)
+            var beerToDelete = _context.Beers.FirstOrDefault(b => b.Id == beerId);
+
+            if (beerToDelete != null)
             {
-                _context.Beers.Remove(beer);
+                _context.Beers.Remove(beerToDelete);
+                _context.SaveChanges();
             }
         }
 
         public List<Beer> GetBeersByBrasserie(int brasserieId)
         {
-            return _context.Beers.Where(x => x.BrasserieId == brasserieId).ToList();
+            return _context.Beers.Where(b => b.BrasserieId == brasserieId).ToList();
         }
 
-        public List<Vendor> GetVendorsByBeer(int beerId)
+        public List<string> GetVendorsByBeer(int beerId)
         {
-            var beer = _context.Beers.FirstOrDefault(x => x.BeerId == beerId);
-
-            if(beer != null)
-            {
-                return beer.Vendors.ToList();
-            }
-
-            return null;
+            var vendors = _context.Vendors.Where(v => v.Stocks.Any(b => b.BeerId == beerId))
+                                            .Select(v => v.Name)
+                                            .ToList();
+            return vendors;
         }
     }
 }
-

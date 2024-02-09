@@ -15,18 +15,28 @@ namespace BeerManager.Services
 
         public void AddBeerToVendor(int vendorId, int beerId)
         {
-            var vendor = _context.Vendors.FirstOrDefault(v => v.VendorId == vendorId);
-            var beer = _context.Beers.FirstOrDefault(b => b.BeerId == beerId);
+            var beer = _context.Beers.FirstOrDefault(b => b.Id == beerId);
+            var vendor = _context.Vendors.FirstOrDefault(v => v.Id == vendorId);
 
-            if (vendor != null && beer != null)
+            if(beer == null || vendor == null)
             {
-                vendor.Beers.Add(beer);
-                _context.SaveChanges();              
+                throw new Exception("Beer or vendor doesn't exist");
             }
-            else
+
+            if (vendor.Stocks.Any(s => s.BeerId == beerId))
             {
-                throw new Exception("Vendor or beer not found");
+                throw new Exception("Beer is already sold by this vendor");
             }
+
+            var beerStock = new Stock
+            {
+                BeerId = beerId,
+                Quantity = 0 
+            };
+
+            vendor.Stocks.Add(beerStock);
+
+            _context.SaveChanges();
         }
     }
 }
